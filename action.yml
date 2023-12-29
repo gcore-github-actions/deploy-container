@@ -1,0 +1,102 @@
+name: Deploy to Gcore Container as a Service
+description: Use this action to deploy a container to Gcore Container as a Service.
+author: Gcore
+branding:
+  icon: layers
+  color: orange
+runs:
+  using: node20
+  main: dist/index.js
+inputs:
+  api-url:
+    description: |-
+      The Gcore API endpoint URL.
+      Should be left as-is in most circumstances.
+    required: false
+    default: "https://api.gcore.com/cloud"
+  api-token:
+    description: |-
+      A permanent API token that will authenticate the GitHub action to Gcore API.
+    required: true
+  project-id:
+    description: |-
+      The ID of the Gcore project in which the container should be deployed.
+    required: true
+  region-id:
+    description: |-
+      The ID of the region in which the container should be deployed.
+    required: true
+  name:
+    description: |-
+      The name of the container to deploy.
+    required: true
+  image:
+    description: |-
+      The name of the container image to deploy (e.g. docker.io/nginx:latest).
+    required: true
+  listening-port:
+    description: |-
+      The port on which the container will be listening for network connections.
+    required: false
+    default: "80"
+  description:
+    description: |-
+      A custom description of the container.
+    required: false
+    default: ""
+  envs:
+    description: |-
+      List of key-value pairs to set as environment variables in the format: KEY1=VALUE1,KEY2=VALUE2.
+    required: false
+    default: ""
+  flavor:
+    description: |-
+      The container flavor determining the amount of memory and cpu allocated to each container instance.
+    required: false
+    default: "250mCPU-512MB"
+  timeout:
+    description: |-
+      The duration (in seconds) to wait before scaling down container instances.
+    required: false
+    default: "60"
+  scale-min:
+    description: |-
+      The minimum number of instances to run.
+      When set to '0', the container will scale down to zero running instances when it receives no traffic
+      for the duration of 'timeout' value.
+    required: false
+    default: "1"
+  scale-max:
+    description: |-
+      The maximum number of instances to run.
+      The value must be greater than or equal to scale-min.
+    required: false
+    default: "1"
+  is-disabled:
+    description: |-
+      When set to 'true', the container is disabled and any running instances are shut down.
+    required: false
+    default: "false"
+  is-api-key-auth:
+    description: |-
+      When set to 'true', enables API key authentication for the container endpoint address.
+      API keys can be created and assigned to the container in Gcore dashboard.
+    required: false
+    default: "false"
+  pull-secret:
+    description: |-
+      The name of the private registry credentials to use when fetching the container image.
+      The credentials must already be configured in Gcore dashboard.
+    required: false
+    default: ""
+outputs:
+  address:
+    description: |-
+      The endpoint address of your container.
+  status:
+    description: |-
+      The status of your container (e.g. Pending, Deploying, Ready, Error).
+  status-message:
+    description: |-
+      The last message associated with current container status.
+      Can be useful for troubleshooting deployment issues.
