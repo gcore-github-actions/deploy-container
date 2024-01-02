@@ -24702,6 +24702,36 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 3497:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.ApiTokenCredentialHandler = void 0;
+class ApiTokenCredentialHandler {
+    token;
+    constructor(token) {
+        this.token = token;
+    }
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers.authorization = `APIKey ${this.token}`;
+    }
+    canHandleAuthentication() {
+        return false;
+    }
+    async handleAuthentication() {
+        return Promise.reject(new Error('not implemented'));
+    }
+}
+exports.ApiTokenCredentialHandler = ApiTokenCredentialHandler;
+
+
+/***/ }),
+
 /***/ 6314:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -24733,6 +24763,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GcoreClient = void 0;
 const httpm = __importStar(__nccwpck_require__(6255));
+const auth_1 = __nccwpck_require__(3497);
 class GcoreClient {
     url;
     projectId;
@@ -24742,7 +24773,7 @@ class GcoreClient {
         this.url = url;
         this.projectId = projectId;
         this.regionId = regionId;
-        this.httpClient = new httpm.HttpClient(`gcore-github-actions:deploy-container`, [new ApiTokenCredentialHandler(token)], {
+        this.httpClient = new httpm.HttpClient(`gcore-github-actions:deploy-container`, [new auth_1.ApiTokenCredentialHandler(token)], {
             socketTimeout: 1000,
             headers: {
                 Accept: 'application/json',
@@ -24791,24 +24822,6 @@ class GcoreClient {
     }
 }
 exports.GcoreClient = GcoreClient;
-class ApiTokenCredentialHandler {
-    token;
-    constructor(token) {
-        this.token = token;
-    }
-    prepareRequest(options) {
-        if (!options.headers) {
-            throw Error('The request has no headers');
-        }
-        options.headers['Authorization'] = `APIKey ${this.token}`;
-    }
-    canHandleAuthentication() {
-        return false;
-    }
-    async handleAuthentication() {
-        return Promise.reject(new Error('not implemented'));
-    }
-}
 
 
 /***/ }),

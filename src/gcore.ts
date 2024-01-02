@@ -1,5 +1,5 @@
 import * as httpm from '@actions/http-client'
-import * as httpifm from '@actions/http-client/lib/interfaces'
+import { ApiTokenCredentialHandler } from './auth'
 
 export interface Container {
   name?: string
@@ -106,28 +106,5 @@ export class GcoreClient {
 
   private async sleep(milliseconds: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
-  }
-}
-
-class ApiTokenCredentialHandler implements httpifm.RequestHandler {
-  token: string
-
-  constructor(token: string) {
-    this.token = token
-  }
-
-  prepareRequest(options: httpifm.RequestOptions): void {
-    if (!options.headers) {
-      throw Error('The request has no headers')
-    }
-    options.headers['Authorization'] = `APIKey ${this.token}`
-  }
-
-  canHandleAuthentication(): boolean {
-    return false
-  }
-
-  async handleAuthentication(): Promise<httpm.HttpClientResponse> {
-    return Promise.reject(new Error('not implemented'))
   }
 }
