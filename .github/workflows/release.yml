@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: gh release create ${{ github.ref_name }} --draft --generate-notes --verify-tag
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare draft release
+        id: release
+        run: gh release create ${{ github.ref_name }} --draft --generate-notes --verify-tag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
