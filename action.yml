@@ -46,7 +46,8 @@ inputs:
     default: ""
   envs:
     description: |-
-      List of key-value pairs to set as environment variables in the format: KEY1=VALUE1,KEY2=VALUE2.
+      List of newline-separated key-value pairs to set as environment variables.
+      All existing environment variables will be retained.
     required: false
     default: ""
   flavor:
@@ -56,14 +57,14 @@ inputs:
     default: "250mCPU-512MB"
   timeout:
     description: |-
-      The duration (in seconds) to wait before scaling down container instances.
+      The duration in seconds to wait before scaling down container instances.
     required: false
     default: "60"
   scale-min:
     description: |-
       The minimum number of instances to run.
-      When set to '0', the container will scale down to zero running instances when it receives no traffic
-      for the duration of 'timeout' value.
+      When set to `0`, the container will scale down to zero running instances when it receives no traffic
+      for the duration of `timeout` value.
     required: false
     default: "1"
   scale-max:
@@ -74,12 +75,12 @@ inputs:
     default: "1"
   is-disabled:
     description: |-
-      When set to 'true', the container is disabled and any running instances are shut down.
+      When set to `true`, the container is disabled and any running instances are shut down.
     required: false
     default: "false"
   is-api-key-auth:
     description: |-
-      When set to 'true', enables API key authentication for the container endpoint address.
+      When set to `true`, enables API key authentication for the container endpoint address.
       API keys can be created and assigned to the container in Gcore dashboard.
     required: false
     default: "false"

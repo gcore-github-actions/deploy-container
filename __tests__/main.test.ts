@@ -112,7 +112,7 @@ describe('action', () => {
     })
 
     it('sets optional envs', async () => {
-      setInputValues({ envs: 'FOO=BAR,BAZ=42' })
+      setInputValues({ envs: 'FOO=BAR\nBAZ=42' })
       await main.run()
       const createContainerMock = (gcoreClientMock.mock.instances[0].createContainer as jest.Mock).mock
       expect(createContainerMock.calls[0][0]).toHaveProperty('envs', { FOO: 'BAR', BAZ: '42' })
@@ -183,7 +183,7 @@ describe('action', () => {
     })
 
     it('sets optional envs', async () => {
-      setInputValues({ envs: 'FOO=BAR,BAZ=42' })
+      setInputValues({ envs: 'FOO=BAR\nBAZ=42' })
       await main.run()
       const updateContainerMock = (gcoreClientMock.mock.instances[0].updateContainer as jest.Mock).mock
       expect(updateContainerMock.calls[0][1]).toHaveProperty('envs', { FOO: 'BAR', BAZ: '42' })

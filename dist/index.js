@@ -24914,9 +24914,9 @@ async function run() {
 exports.run = run;
 function parseEnvList(envs) {
     const result = {};
-    for (const pair of envs.split(',')) {
+    for (const pair of envs.split('\n')) {
         const [key, val] = pair.split('=');
-        result[key] = val;
+        result[key.trim()] = val.trim();
     }
     return result;
 }
