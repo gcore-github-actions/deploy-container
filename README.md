@@ -49,11 +49,11 @@ jobs:
 - `image` - (required) The name of the container image to deploy (e.g. docker.io/nginx:latest).
 - `listening-port` - (optional) The port on which the container will be listening for network connections. The default value is `80`.
 - `description` - (optional) A custom description of the container.
-- `envs` - (optional) List of newline-separated key-value pairs to set as environment variables. All existing environment variables will be retained.
+- `envs` - (optional) List of newline-separated key-value pairs to set as environment variables.
 
    ```yaml
     with:
-      env_vars: |
+      envs: |
         FOO=bar
         BAZ=biz
     ```

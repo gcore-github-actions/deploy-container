@@ -47,7 +47,6 @@ inputs:
   envs:
     description: |-
       List of newline-separated key-value pairs to set as environment variables.
-      All existing environment variables will be retained.
     required: false
     default: ""
   flavor:
