@@ -20,8 +20,8 @@ export async function run(): Promise<void> {
     const flavor = core.getInput('flavor')
     const scaleMin = core.getInput('scale-min')
     const scaleMax = core.getInput('scale-max')
-    const isDisabled = core.getBooleanInput('is-disabled')
-    const isApiKeyAuth = core.getBooleanInput('is-api-key-auth')
+    const isDisabled = core.getInput('is-disabled')
+    const isApiKeyAuth = core.getInput('is-api-key-auth')
     const pullSecret = core.getInput('pull-secret')
 
     // params required by the Gcore API
@@ -45,11 +45,11 @@ export async function run(): Promise<void> {
     }
 
     if (isDisabled) {
-      params.is_disabled = isDisabled
+      params.is_disabled = core.getBooleanInput('is-disabled')
     }
 
     if (isApiKeyAuth) {
-      params.is_api_key_auth = isApiKeyAuth
+      params.is_api_key_auth = core.getBooleanInput('is-api-key-auth')
     }
 
     if (pullSecret) {

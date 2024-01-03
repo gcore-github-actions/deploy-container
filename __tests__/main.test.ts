@@ -27,8 +27,8 @@ const fakeInputs: { [key: string]: string } = {
   flavor: '250mCPU-512MB',
   'scale-min': '1',
   'scale-max': '1',
-  'is-disabled': 'false',
-  'is-api-key-auth': 'false',
+  'is-disabled': '',
+  'is-api-key-auth': '',
   'pull-secret': ''
 }
 
