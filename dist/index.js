@@ -24775,7 +24775,6 @@ class GcoreClient {
         this.projectId = projectId;
         this.regionId = regionId;
         this.httpClient = new httpm.HttpClient(`gcore-github-actions:deploy-container`, [new auth_1.ApiTokenCredentialHandler(token)], {
-            socketTimeout: 1000,
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'

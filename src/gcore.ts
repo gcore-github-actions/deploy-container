@@ -55,7 +55,6 @@ export class GcoreClient {
       `gcore-github-actions:deploy-container`,
       [new ApiTokenCredentialHandler(token)],
       {
-        socketTimeout: 1000,
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json'
