@@ -24,7 +24,7 @@ jobs:
           project-id: ${{ vars.GCLOUD_PROJECT }}
           region-id: ${{ vars.GCLOUD_REGION }}
           name: test-container
-          image: nginx:alpine
+          image: nginx:latest
 
       - name: Print Output
         id: output

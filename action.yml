@@ -53,7 +53,7 @@ inputs:
     description: |-
       The container flavor determining the amount of memory and cpu allocated to each container instance.
     required: false
-    default: "250mCPU-512MB"
+    default: "80mCPU-128MB"
   timeout:
     description: |-
       The duration in seconds to wait before scaling down container instances.

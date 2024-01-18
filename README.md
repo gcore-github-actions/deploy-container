@@ -24,11 +24,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - id: deploy
-        uses: gcore-github-actions/deploy-container@v1
+        uses: gcore-github-actions/deploy-container@v1.0.0
         with:
-          api_token: ${{ secrets.GCLOUD_API_TOKEN }}
-          project: ${{ vars.GCLOUD_PROJECT }}
-          region: ${{ vars.GCLOUD_REGION }}
+          api-token: ${{ secrets.GCLOUD_API_TOKEN }}
+          project-id: ${{ vars.GCLOUD_PROJECT }}
+          region-id: ${{ vars.GCLOUD_REGION }}
           name: my-container
           image: nginx:latest
 
@@ -58,7 +58,7 @@ jobs:
         BAZ=biz
     ```
 
-- `flavor` - (optional) The container flavor determining the amount of memory and cpu allocated to each container instance. The default value is `250mCPU-512MB`.
+- `flavor` - (optional) The container flavor determining the amount of memory and cpu allocated to each container instance. The default value is `80mCPU-128MB`.
 - `timeout` - (optional) The duration in seconds to wait before scaling down container instances. The default value is `60`.
 - `scale-min` - (optional) The minimum number of instances to run. When set to `0`, the container will scale down to zero running instances when it receives no traffic for the duration of `timeout`. The default value is `1`.
 - `scale-max` - (optional) The maximum number of instances to run. The value must be greater than or equal to scale-min. The default value is `1`.
