@@ -24762,6 +24762,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GcoreClient = void 0;
+const core = __importStar(__nccwpck_require__(2186));
 const httpm = __importStar(__nccwpck_require__(6255));
 const auth_1 = __nccwpck_require__(3497);
 class GcoreClient {
@@ -24786,36 +24787,54 @@ class GcoreClient {
     };
     tasksUrl = (id) => `${this.url}/v1/tasks${id ? `/${id}` : ''}`;
     async getContainer(name) {
+        core.debug(`Get container ${name}`);
         const response = await this.httpClient.getJson(this.containersUrl(name));
         return response.result;
     }
     async createContainer(params) {
-        const response = await this.httpClient.postJson(this.containersUrl(), params);
-        const task = response.result?.tasks.pop();
-        await this.waitForTask(task ?? '');
+        core.debug(`Create container ${params.name} with params: ${JSON.stringify(params)}`);
+        const response = await this.httpClient.post(this.containersUrl(), JSON.stringify(params));
+        const result = await this.parseResponse(response);
+        const task_id = result.tasks.pop();
+        if (!task_id) {
+            throw new Error(`could not find task id in response`);
+        }
+        await this.waitForTask(task_id ?? '');
         return await this.getContainer(params.name ?? '');
     }
     async updateContainer(name, params) {
-        const response = await this.httpClient.patchJson(this.containersUrl(name), params);
-        const task = response.result?.tasks.pop();
-        await this.waitForTask(task ?? '');
+        core.debug(`Update container ${name} with params: ${JSON.stringify(params)}`);
+        const response = await this.httpClient.patch(this.containersUrl(name), JSON.stringify(params));
+        const result = await this.parseResponse(response);
+        const task_id = result.tasks.pop();
+        if (!task_id) {
+            throw new Error(`could not find task id in response`);
+        }
+        await this.waitForTask(task_id ?? '');
         return await this.getContainer(name);
     }
     async waitForTask(id) {
+        core.debug(`Waiting for task ${id}`);
         for (;;) {
-            const response = await this.httpClient.getJson(this.tasksUrl(id));
-            const task = response.result;
-            if (!task) {
-                throw new Error(`cannot find task with id: ${id}`);
-            }
-            if (task?.state === 'FINISHED') {
+            const response = await this.httpClient.get(this.tasksUrl(id));
+            const task = await this.parseResponse(response);
+            if (task.state === 'FINISHED') {
                 return;
             }
-            else if (task?.state === 'ERROR' || task?.error) {
-                throw new Error(`task is in error state: ${task?.error}`);
+            else if (task.state === 'ERROR' || task.error) {
+                throw new Error(`task is in error state: ${task.error}`);
             }
             await this.sleep(2000);
         }
+    }
+    async parseResponse(response) {
+        const body = await response.readBody();
+        const statusCode = response.message.statusCode ?? 0;
+        if (statusCode >= 400) {
+            const error = JSON.parse(body);
+            throw new Error(`request failed with ${response.message.statusCode}: ${error.message}`);
+        }
+        return JSON.parse(body);
     }
     async sleep(milliseconds) {
         return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -24907,14 +24926,18 @@ async function run() {
             params.pull_secret = pullSecret;
         }
         const client = new gcore_1.GcoreClient(apiUrl, projectId, regionId, apiToken);
+        core.info(`Checking if container ${name} exists`);
         let response = await client.getContainer(name);
         if (response) {
+            core.info(`Updating container ${name}`);
             response = await client.updateContainer(name, params);
         }
         else {
+            core.info(`Creating container ${name}`);
             params.name = name;
             response = await client.createContainer(params);
         }
+        core.info(`Done`);
         core.setOutput('address', response?.address);
         core.setOutput('status', response?.status);
         core.setOutput('status-message', response?.status_message);

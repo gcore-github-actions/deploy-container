@@ -57,13 +57,17 @@ export async function run(): Promise<void> {
     }
 
     const client = new GcoreClient(apiUrl, projectId, regionId, apiToken)
+    core.info(`Checking if container ${name} exists`)
     let response = await client.getContainer(name)
     if (response) {
+      core.info(`Updating container ${name}`)
       response = await client.updateContainer(name, params)
     } else {
+      core.info(`Creating container ${name}`)
       params.name = name
       response = await client.createContainer(params)
     }
+    core.info(`Done`)
 
     core.setOutput('address', response?.address)
     core.setOutput('status', response?.status)
