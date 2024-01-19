@@ -24925,14 +24925,14 @@ async function run() {
             params.pull_secret = pullSecret;
         }
         const client = new gcore_1.GcoreClient(apiUrl, projectId, regionId, apiToken);
-        core.info(`Checking if container ${name} exists`);
+        core.info(`Checking if container '${name}' exists`);
         let response = await client.getContainer(name);
         if (response) {
-            core.info(`Updating container ${name}`);
+            core.info(`Updating container '${name}'`);
             response = await client.updateContainer(name, params);
         }
         else {
-            core.info(`Creating container ${name}`);
+            core.info(`Creating container '${name}'`);
             params.name = name;
             response = await client.createContainer(params);
         }
