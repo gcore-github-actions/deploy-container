@@ -15,16 +15,19 @@ The `deploy-container` GitHub Action deploys a container image to Gcore Containe
 > A Gcore [permanent API token](https://gcore.com/docs/account-settings/create-use-or-delete-a-permanent-api-token) is required to authorize access to the Gcore API.
 
 ```yaml
+name: Deploy
+
+on:
+  workflow_dispatch:
+
 jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-
       - id: deploy
-        uses: gcore-github-actions/deploy-container@v1.0.0
+        uses: gcore-github-actions/deploy-container@v1
         with:
           api-token: ${{ secrets.GCLOUD_API_TOKEN }}
           project-id: ${{ vars.GCLOUD_PROJECT }}
@@ -33,7 +36,7 @@ jobs:
           image: nginx:latest
 
       - name: Use output
-        run: curl "${{ steps.deploy.outputs.address }}"
+        run: echo "${{ steps.deploy.outputs.address }}"
 ```
 
 > [!NOTE]
@@ -90,3 +93,4 @@ jobs:
 1. Open the [Releases](https://github.com/gcore-github-actions/deploy-container/releases) page and go to the draft release.
 1. Make sure the `Publish this release to the GitHub Marketplace` checkbox is checked and changelog is correct.
 1. Publish the new release.
+1. Move the major version tag (e.g. v1) to the latest patch release.
